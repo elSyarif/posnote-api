@@ -1,4 +1,4 @@
-package api
+package roles
 
 import (
 	"context"
@@ -9,22 +9,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type RolesHandler struct {
+type Handler struct {
 	service ports.RoleService
 }
 
-func NewRolesHandler(rolesService ports.RoleService) *RolesHandler {
-	return &RolesHandler{
+func NewRolesHandler(rolesService ports.RoleService) *Handler {
+	return &Handler{
 		service: rolesService,
 	}
 }
 
-func (handler *RolesHandler) AddRole(ctx *gin.Context) {
+func (handler *Handler) AddRole(ctx *gin.Context) {
 	_, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	var role *domain.Roles
-	ctx.ShouldBindJSON(&role)
+	err := ctx.ShouldBindJSON(&role)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
 
 	ctx.JSON(http.StatusCreated, gin.H{
 		"data": role,

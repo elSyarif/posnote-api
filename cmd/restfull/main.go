@@ -1,21 +1,17 @@
 package main
 
 import (
-	api "github.com/elSyarif/posnote-api.git/internal/api/roles"
-	"github.com/elSyarif/posnote-api.git/internal/config"
+	"github.com/elSyarif/posnote-api.git/internal/api"
+	"github.com/elSyarif/posnote-api.git/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	app := gin.New()
-	env := config.New()
-	db, err := config.NewDB(env)
-	if err != nil {
-		panic(err)
-	}
+	app.Use(gin.Recovery())
+	app.Use(middleware.ErrorHandler)
 
-	v1 := app.Group("v1")
-	api.NewRolesRoute(v1, db)
+	serve := api.NewApiServer(app)
 
-	app.Run("localhost:5000")
+	serve.Run("localhost:5000")
 }

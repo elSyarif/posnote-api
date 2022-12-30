@@ -1,4 +1,4 @@
-package api
+package roles
 
 import (
 	"github.com/elSyarif/posnote-api.git/internal/core/services"
@@ -9,8 +9,8 @@ import (
 
 func NewRolesRoute(router *gin.RouterGroup, db *sqlx.DB) *gin.RouterGroup {
 	repository := mysql_db.NewRolesRepository(db)
-	services := services.NewRolesService(repository)
-	handler := NewRolesHandler(services)
+	service := services.NewRolesService(repository)
+	handler := NewRolesHandler(service)
 
 	router.POST("roles", handler.AddRole)
 
