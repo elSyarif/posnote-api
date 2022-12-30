@@ -23,6 +23,9 @@ func ErrorHandler(ctx *gin.Context) {
 			helper.HTTPResponseError(ctx, http.StatusBadRequest, "fail", "validation error", errMsgs)
 			return
 		}
+
+		helper.HTTPResponseError(ctx, http.StatusInternalServerError, "fail", ginErr.Err.Error(), nil)
+		return
 	}
 
 }

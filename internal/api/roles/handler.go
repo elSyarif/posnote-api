@@ -2,11 +2,11 @@ package roles
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/elSyarif/posnote-api.git/internal/core/domain"
 	"github.com/elSyarif/posnote-api.git/internal/core/ports"
+	"github.com/elSyarif/posnote-api.git/internal/helper"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Handler struct {
@@ -30,7 +30,10 @@ func (handler *Handler) AddRole(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"data": role,
-	})
+	result, err := handler.service.AddRole(ctx, role)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	helper.HTTPResponseSuccessWithData(ctx, http.StatusCreated, gin.H{"roleId": result.Id})
 }
