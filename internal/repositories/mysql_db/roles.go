@@ -29,7 +29,7 @@ func (repository *roleRepositroy) Save(ctx context.Context, role *domain.Roles) 
 	if err != nil {
 		return nil, errors.New(err.Error())
 	}
-	result, err := tx.ExecContext(ctx, query, role)
+	result, err := tx.ExecContext(ctx, query, role.Id, role.Name, role.Description)
 	if err != nil {
 		return nil, errors.New(err.Error())
 	}
