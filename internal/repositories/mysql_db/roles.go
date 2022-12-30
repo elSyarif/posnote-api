@@ -31,12 +31,14 @@ func (repository *roleRepositroy) Save(ctx context.Context, role *domain.Roles) 
 	}
 	result, err := tx.ExecContext(ctx, query, role.Id, role.Name, role.Description)
 	if err != nil {
+		tx.Rollback()
 		return nil, errors.New(err.Error())
 	}
 
-	if row, _ := result.RowsAffected(); row > 0 {
-		return role, nil
+	tx.Commit()
+	if row, _ := result.RowsAffected(); row < 0 {
+		return nil, errors.New(err.Error())
 	}
 
-	return nil, errors.New(err.Error())
+	return role, nil
 }
