@@ -13,6 +13,9 @@ func NewRolesRoute(router *gin.RouterGroup, db *sqlx.DB) *gin.RouterGroup {
 	handler := NewRolesHandler(service)
 
 	router.POST("roles", handler.AddRole)
+	router.GET("roles", handler.GetRoles)
+	router.PUT("roles/:id", handler.EditRole)
+	router.DELETE("roles/:id", handler.Delete)
 
 	return router
 }
