@@ -26,12 +26,13 @@ func (repsitory *employeeRepository) Save(ctx context.Context, employee *domain.
 	employee.Id = helper.GenerateUuid()
 	employee.CreatedAt = time.Now()
 	employee.UpdatedAt = time.Now()
+	hashPassword := helper.HashPassword(employee.Password)
 
 	tx, err := repsitory.DB.Beginx()
 	if err != nil {
 		return nil, errors.New(err.Error())
 	}
-	result, err := tx.ExecContext(ctx, query, employee.Id, employee.Fullname, employee.Username, employee.Password, employee.RoleId, employee.CreatedAt, employee.UpdatedAt)
+	result, err := tx.ExecContext(ctx, query, employee.Id, employee.Fullname, employee.Username, hashPassword, employee.RoleId, employee.CreatedAt, employee.UpdatedAt)
 	if err != nil {
 		tx.Rollback()
 		return nil, errors.New(err.Error())
@@ -72,7 +73,7 @@ func (repsitory *employeeRepository) VerifyUsername(ctx context.Context, usernam
 		return errors.New(err.Error())
 	}
 
-	_ = tx.GetContext(ctx, &employee, query, username)
+	tx.GetContext(ctx, &employee, query, username)
 
 	if employee.Username != "" {
 		return errors.New("gagal, username suadah digunakan")
@@ -90,12 +91,13 @@ func (repsitory *employeeRepository) VerifyCredential(ctx context.Context, usern
 		return errors.New(err.Error())
 	}
 
-	err = tx.GetContext(ctx, employee, query, username)
+	err = tx.GetContext(ctx, &employee, query, username)
 	if err != nil {
 		return errors.New(err.Error())
 	}
 
-	if employee.Password == password {
+	isMatch := helper.CheckPasswordHash(password, employee.Password)
+	if isMatch {
 		return nil
 	}
 
