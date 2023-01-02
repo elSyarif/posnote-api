@@ -2,6 +2,7 @@ package employees
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/elSyarif/posnote-api.git/internal/core/domain"
 	"github.com/elSyarif/posnote-api.git/internal/core/ports"
@@ -32,7 +33,7 @@ func (handler *handler) AddEmployee(ctx *gin.Context) {
 
 	result, err := handler.service.AddEmployee(c, employee)
 	if err != nil {
-		ctx.Error(err)
+		helper.HTTPResponseError(ctx, http.StatusBadRequest, "fail", err.Error(), nil)
 		return
 	}
 

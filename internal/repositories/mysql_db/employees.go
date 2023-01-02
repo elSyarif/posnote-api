@@ -55,7 +55,7 @@ func (repsitory *employeeRepository) FindById(ctx context.Context, id string) (*
 		return nil, errors.New(err.Error())
 	}
 
-	err = tx.Get(&employee, query, id)
+	err = tx.GetContext(ctx, &employee, query, id)
 	if err != nil {
 		return nil, errors.New(err.Error())
 	}
@@ -72,12 +72,13 @@ func (repsitory *employeeRepository) VerifyUsername(ctx context.Context, usernam
 		return errors.New(err.Error())
 	}
 
-	err = tx.GetContext(ctx, employee, query, username)
-	if err != nil {
-		return errors.New(err.Error())
+	_ = tx.GetContext(ctx, &employee, query, username)
+
+	if employee.Username != "" {
+		return errors.New("gagal, username suadah digunakan")
 	}
 
-	return errors.New("gagal, username suadah digunakan")
+	return nil
 }
 
 func (repsitory *employeeRepository) VerifyCredential(ctx context.Context, username string, password string) error {

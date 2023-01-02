@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"errors"
 
 	"github.com/elSyarif/posnote-api.git/internal/core/domain"
 	"github.com/elSyarif/posnote-api.git/internal/core/ports"
@@ -18,6 +19,11 @@ func NewEmployeeService(repositoy ports.EmployeeRepository) ports.EmployeeServic
 }
 
 func (service *employeeService) AddEmployee(ctx context.Context, employee *domain.Employees) (*domain.Employees, error) {
+	err := service.repositroy.VerifyUsername(ctx, employee.Username)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
 	return service.repositroy.Save(ctx, employee)
 }
 
