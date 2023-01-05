@@ -10,13 +10,17 @@ import (
 	"github.com/google/uuid"
 )
 
-func GenerateAccessToken(payload uuid.UUID) (interface{}, error) {
+func GenerateAccessToken(payload string) (interface{}, error) {
+	parse, err := uuid.Parse(payload)
+	if err != nil {
+		return nil, err
+	}
 	claims := domain.JWTClaims{
 		StandardClaims: jwt.StandardClaims{
 			Issuer:    "posnote",
 			ExpiresAt: time.Now().Add(time.Minute * 1).Unix(),
 		},
-		EmpId: payload,
+		EmpId: parse,
 	}
 
 	token := jwt.NewWithClaims(
@@ -32,13 +36,17 @@ func GenerateAccessToken(payload uuid.UUID) (interface{}, error) {
 	return accessToken, nil
 }
 
-func GenerateRefreshToken(payload uuid.UUID) (interface{}, error) {
+func GenerateRefreshToken(payload string) (interface{}, error) {
+	parse, err := uuid.Parse(payload)
+	if err != nil {
+		return nil, err
+	}
 	claims := domain.JWTClaims{
 		StandardClaims: jwt.StandardClaims{
 			Issuer:    "posnote",
 			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
 		},
-		EmpId: payload,
+		EmpId: parse,
 	}
 
 	token := jwt.NewWithClaims(

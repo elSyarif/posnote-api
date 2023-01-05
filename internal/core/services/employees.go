@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"errors"
-
 	"github.com/elSyarif/posnote-api.git/internal/core/domain"
 	"github.com/elSyarif/posnote-api.git/internal/core/ports"
 )
@@ -35,6 +34,6 @@ func (service *employeeService) VerifyUsername(ctx context.Context, username str
 	return service.repositroy.VerifyUsername(ctx, username)
 }
 
-func (service *employeeService) VerifyCredential(ctx context.Context, username string, password string) error {
+func (service *employeeService) VerifyCredential(ctx context.Context, username string, password string) (string, error) {
 	return service.repositroy.VerifyCredential(ctx, username, password)
 }

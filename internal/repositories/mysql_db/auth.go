@@ -3,6 +3,7 @@ package mysql_db
 import (
 	"context"
 	"errors"
+	"github.com/elSyarif/posnote-api.git/internal/core/domain"
 
 	"github.com/elSyarif/posnote-api.git/internal/core/ports"
 	"github.com/jmoiron/sqlx"
@@ -43,15 +44,15 @@ func (respository *authRepository) Save(ctx context.Context, token string) error
 func (respository *authRepository) VerifyRefreshToken(ctx context.Context, token string) error {
 	query := "SELECT token FROM authentication WHERE token = ?"
 
-	var jwt *string
+	auth := domain.Authentication{}
 	tx, err := respository.DB.Beginx()
 	if err != nil {
 		return errors.New(err.Error())
 	}
 
-	err = tx.GetContext(ctx, &jwt, query, token)
+	err = tx.GetContext(ctx, &auth, query, token)
 	if err != nil {
-		return errors.New(err.Error())
+		return errors.New("token tidak ditemukan")
 	}
 
 	return nil

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/elSyarif/posnote-api.git/internal/api/auth"
 	"github.com/elSyarif/posnote-api.git/internal/api/employees"
 	"github.com/elSyarif/posnote-api.git/internal/api/roles"
 	"github.com/elSyarif/posnote-api.git/internal/config"
@@ -19,6 +20,7 @@ func NewApiServer(app *gin.Engine) *gin.Engine {
 	v1 := app.Group("v1")
 	roles.NewRolesRoute(v1, db)
 	employees.NewEmployeeRoutes(v1, db)
+	auth.NewAuthRoutes(v1, db)
 
 	app.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{
