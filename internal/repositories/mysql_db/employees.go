@@ -47,7 +47,7 @@ func (repsitory *employeeRepository) Save(ctx context.Context, employee *domain.
 }
 
 func (repsitory *employeeRepository) FindById(ctx context.Context, id string) (*domain.Employees, error) {
-	query := "SELECT * FROM employees WHERE id = ?"
+	query := "SELECT id, fullname, username, role_id, created_at, updated_at FROM employees WHERE id = ?"
 
 	employee := domain.Employees{}
 
@@ -82,24 +82,24 @@ func (repsitory *employeeRepository) VerifyUsername(ctx context.Context, usernam
 	return nil
 }
 
-func (repsitory *employeeRepository) VerifyCredential(ctx context.Context, username string, password string) error {
+func (repsitory *employeeRepository) VerifyCredential(ctx context.Context, username string, password string) (string, error) {
 	query := "select id, username, password FROM employees WHERE username = ?"
 	var employee domain.Employees
 
 	tx, err := repsitory.DB.Beginx()
 	if err != nil {
-		return errors.New(err.Error())
+		return "", errors.New(err.Error())
 	}
 
 	err = tx.GetContext(ctx, &employee, query, username)
 	if err != nil {
-		return errors.New(err.Error())
+		return "", errors.New(err.Error())
 	}
 
 	isMatch := helper.CheckPasswordHash(password, employee.Password)
 	if isMatch {
-		return nil
+		return employee.Id, nil
 	}
 
-	return errors.New("username/password salah")
+	return "", errors.New("username/password salah")
 }
