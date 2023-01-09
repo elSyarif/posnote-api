@@ -58,7 +58,7 @@ func (repsitory *employeeRepository) FindById(ctx context.Context, id string) (*
 
 	err = tx.GetContext(ctx, &employee, query, id)
 	if err != nil {
-		return nil, errors.New(err.Error())
+		return nil, errors.New("NOT_FOUND")
 	}
 
 	return &employee, nil

@@ -50,7 +50,7 @@ func (handler *handler) GetEmployeeById(ctx *gin.Context) {
 
 	result, err := handler.service.GetById(c, id)
 	if err != nil {
-		ctx.Error(err)
+		helper.HTTPResponseError(ctx, 404, "fail", "employee id tidak ditemukan", nil)
 		return
 	}
 

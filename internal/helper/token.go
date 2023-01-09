@@ -18,7 +18,7 @@ func GenerateAccessToken(payload string) (interface{}, error) {
 	claims := domain.JWTClaims{
 		StandardClaims: jwt.StandardClaims{
 			Issuer:    "posnote",
-			ExpiresAt: time.Now().Add(time.Minute * 1).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 60).Unix(),
 		},
 		EmpId: parse,
 	}
