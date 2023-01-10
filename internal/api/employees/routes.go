@@ -14,7 +14,7 @@ func NewEmployeeRoutes(router *gin.RouterGroup, db *sqlx.DB) *gin.RouterGroup {
 	handler := NewEmployeeHandler(service)
 
 	router.POST("/employees", handler.AddEmployee)
-	router.GET("/employees/:id", middleware.Protected(), handler.GetEmployeeById)
+	router.GET("/employees/:id", middleware.Auth(), handler.GetEmployeeById)
 
 	return router
 }

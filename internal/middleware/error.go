@@ -3,10 +3,11 @@ package middleware
 import (
 	"errors"
 	"fmt"
+	"net/http"
+
 	"github.com/elSyarif/posnote-api.git/internal/helper"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"net/http"
 )
 
 func ErrorHandler(ctx *gin.Context) {
@@ -20,7 +21,7 @@ func ErrorHandler(ctx *gin.Context) {
 				errMsg := fmt.Sprintf("Error on field %s, condition: %s", er.Field(), er.ActualTag())
 				errMsgs = append(errMsgs, errMsg)
 			}
-			helper.HTTPResponseError(ctx, http.StatusBadRequest, "fail", "validation error", errMsgs)
+			helper.HTTPResponseError(ctx, http.StatusUnprocessableEntity, "fail", "validation error", errMsgs)
 			return
 		} else {
 			helper.HTTPResponseError(ctx, http.StatusInternalServerError, "fail", ginErr.Err.Error(), nil)

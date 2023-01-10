@@ -17,6 +17,7 @@ func NewAuthRoutes(router *gin.RouterGroup, db *sqlx.DB) *gin.RouterGroup {
 
 	router.POST("/auth", handler.PostAuthentication)
 	router.PUT("/auth", handler.PutAuthentication)
+	router.DELETE("/auth", handler.DeleteAuthentication)
 
 	return router
 }
