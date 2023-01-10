@@ -15,10 +15,10 @@ func GenerateAccessToken(payload string) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	claims := domain.JWTClaims{
+	claims := &domain.JWTClaims{
 		StandardClaims: jwt.StandardClaims{
 			Issuer:    "posnote",
-			ExpiresAt: time.Now().Add(time.Minute * 1).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 60).Unix(),
 		},
 		EmpId: parse,
 	}
@@ -82,6 +82,10 @@ func GetJWTData(token string, secret string) (*domain.JWTClaims, error) {
 	claims, ok := tokenVerified.Claims.(*domain.JWTClaims)
 	if !ok && !tokenVerified.Valid {
 		return nil, errors.New("invalid token")
+	}
+
+	if claims.ExpiresAt < time.Now().Local().Unix() {
+		return nil, errors.New("token expired")
 	}
 
 	return claims, nil
