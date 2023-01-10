@@ -1,12 +1,15 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/elSyarif/posnote-api.git/internal/api/auth"
 	"github.com/elSyarif/posnote-api.git/internal/api/employees"
+	"github.com/elSyarif/posnote-api.git/internal/api/plants"
 	"github.com/elSyarif/posnote-api.git/internal/api/roles"
 	"github.com/elSyarif/posnote-api.git/internal/config"
+	"github.com/elSyarif/posnote-api.git/internal/helper"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func NewApiServer(app *gin.Engine) *gin.Engine {
@@ -21,12 +24,10 @@ func NewApiServer(app *gin.Engine) *gin.Engine {
 	roles.NewRolesRoute(v1, db)
 	employees.NewEmployeeRoutes(v1, db)
 	auth.NewAuthRoutes(v1, db)
+	plants.NewPlantRoutes(v1, db)
 
 	app.NoRoute(func(ctx *gin.Context) {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"status":  "NOT_FOUND",
-			"message": "Page not found",
-		})
+		helper.HTTPResponseError(ctx, http.StatusNotFound, "NOT_FOUND", "page not found", nil)
 	})
 	return app
 }
