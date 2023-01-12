@@ -20,13 +20,13 @@ func NewEmployeePlantService(repository ports.EmployeePlantRepostory) ports.Empl
 func (service *employeePlantService) AddEmployeePlant(ctx context.Context, emplplant *domain.EmployeePlants) (*string, error) {
 	return service.repository.Save(ctx, emplplant)
 }
-func (service *employeePlantService) GetEmloyeePlant(ctx context.Context, params ...string) (*[]domain.EmployeePlants, error) {
-	return service.repository.Find(ctx, params...)
+func (service *employeePlantService) GetEmloyeePlant(ctx context.Context, params string) (*[]domain.EmplPlantResponse, error) {
+	return service.repository.Find(ctx, params)
 }
-func (service *employeePlantService) GetByEmployeeId(ctx context.Context, employeeId string) (*domain.EmployeePlants, error) {
+func (service *employeePlantService) GetByEmployeeId(ctx context.Context, employeeId string) (*domain.EmplPlantResponse, error) {
 	return service.repository.FindByEmployeeId(ctx, employeeId)
 }
-func (service *employeePlantService) GetByPlantId(ctx context.Context, plantId string) (*[]domain.EmployeePlants, error) {
+func (service *employeePlantService) GetByPlantId(ctx context.Context, plantId string) (*[]domain.EmplPlantResponse, error) {
 	return service.repository.FindByPlantId(ctx, plantId)
 }
 func (service *employeePlantService) Update(ctx context.Context, id string, emplplant *domain.EmployeePlants) error {
