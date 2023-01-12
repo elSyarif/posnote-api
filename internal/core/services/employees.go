@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+
 	"github.com/elSyarif/posnote-api.git/internal/core/domain"
 	"github.com/elSyarif/posnote-api.git/internal/core/ports"
 )
@@ -24,6 +25,10 @@ func (service *employeeService) AddEmployee(ctx context.Context, employee *domai
 	}
 
 	return service.repositroy.Save(ctx, employee)
+}
+
+func (service *employeeService) Get(ctx context.Context, name string) (*[]domain.Employees, error) {
+	return service.repositroy.Find(ctx, name)
 }
 
 func (service *employeeService) GetById(ctx context.Context, id string) (*domain.Employees, error) {

@@ -15,6 +15,7 @@ func NewEmployeeRoutes(router *gin.RouterGroup, db *sqlx.DB) *gin.RouterGroup {
 
 	employees := router.Group("employees")
 	employees.POST("", handler.AddEmployee)
+	employees.GET("", handler.Get)
 
 	employees.Use(middleware.Auth())
 	{
