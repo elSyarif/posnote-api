@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/elSyarif/posnote-api.git/internal/core/domain"
 	"github.com/elSyarif/posnote-api.git/internal/core/ports"
 	"github.com/elSyarif/posnote-api.git/internal/helper"
 	"github.com/gin-gonic/gin"
-	"os"
-	"time"
 )
 
 type handler struct {
@@ -59,8 +60,8 @@ func (handler *handler) PostAuthentication(ctx *gin.Context) {
 	}
 
 	helper.HTTPResponseSuccessWithData(ctx, 200, gin.H{
-		"accessToken":  accessToken,
-		"refreshToken": refreshToken,
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	})
 }
 

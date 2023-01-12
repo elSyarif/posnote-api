@@ -18,8 +18,7 @@ func NewApiServer(app *gin.Engine) *gin.Engine {
 	if err != nil {
 		panic(err)
 	}
-	
-	app.Group("v1")
+
 	v1 := app.Group("v1")
 	roles.NewRolesRoute(v1, db)
 	employees.NewEmployeeRoutes(v1, db)
