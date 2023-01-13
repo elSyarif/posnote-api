@@ -3,8 +3,9 @@ package mysql_db
 import (
 	"context"
 	"errors"
-	"github.com/elSyarif/posnote-api.git/internal/helper"
 	"time"
+
+	"github.com/elSyarif/posnote-api.git/internal/helper"
 
 	"github.com/elSyarif/posnote-api.git/internal/core/domain"
 	"github.com/elSyarif/posnote-api.git/internal/core/ports"
@@ -26,13 +27,15 @@ func (repository *employeePlantRepository) Save(ctx context.Context, emplplant *
 
 	id := helper.GenerateUuid()
 	emplplant.Id = id
+	emplplant.CreatedAt = time.Now().Local()
+	emplplant.UpdatedAt = time.Now().Local()
 
 	tx, err := repository.DB.Beginx()
 	if err != nil {
 		return nil, errors.New(err.Error())
 	}
 
-	result, err := tx.ExecContext(ctx, query, emplplant)
+	result, err := tx.ExecContext(ctx, query, emplplant.Id, emplplant.EmployeeId, emplplant.PlantId, emplplant.Position, emplplant.JoinDate, emplplant.CreatedAt, emplplant.UpdatedAt)
 	if err != nil {
 		tx.Rollback()
 		return nil, errors.New(err.Error())
@@ -94,7 +97,7 @@ func (repository *employeePlantRepository) FindByPlantId(ctx context.Context, pl
 			  	FROM employee_plants ep
 			  INNER JOIN employees e on e.id = ep.employee_id
 			  INNER JOIN plants p on ep.plant_id = p.id
-			  WHERE ep.employee_id = ?`
+			  WHERE ep.plant_id = ?`
 
 	var emplPlantResponse []domain.EmplPlantResponse
 
@@ -103,7 +106,7 @@ func (repository *employeePlantRepository) FindByPlantId(ctx context.Context, pl
 		return nil, errors.New(err.Error())
 	}
 
-	err = tx.GetContext(ctx, &emplPlantResponse, query, plantId)
+	err = tx.SelectContext(ctx, &emplPlantResponse, query, plantId)
 	if err != nil {
 		return nil, errors.New(err.Error())
 	}

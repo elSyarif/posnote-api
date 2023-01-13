@@ -17,15 +17,20 @@ type EmployeePlants struct {
 	EmployeeId string    `db:"employee_id" json:"employee_id" binding:"required"`
 	PlantId    string    `db:"plant_id" json:"plant_id" binding:"required"`
 	Position   string    `db:"position" json:"position" binding:"required"`
-	JoinDate   time.Time `db:"join_date" json:"join_date" binding:"required"`
+	JoinDate   string    `db:"join_date" json:"join_date" binding:"required"`
 	CreatedAt  time.Time `db:"create_at" json:"create_at"`
 	UpdatedAt  time.Time `db:"updated_at" json:"updated_at"`
+}
+
+type PlantWitEmplResponse struct {
+	Plants            Plants
+	EmplPlantResponse []EmplPlantResponse
 }
 
 type EmplPlantResponse struct {
 	Id        string    `json:"id"`
 	Fullname  string    `json:"fullname"`
 	Position  string    `json:"position"`
-	PlantName string    `json:"plant_name"`
-	JoinDate  time.Time `json:"join_date"`
+	PlantName string    `json:"plant_name" db:"plant_name"`
+	JoinDate  time.Time `json:"join_date" db:"join_date"`
 }

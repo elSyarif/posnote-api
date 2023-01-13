@@ -18,9 +18,9 @@ func NewPlantRoutes(router *gin.RouterGroup, db *sqlx.DB) *gin.RouterGroup {
 	{
 		plants.POST("", handler.AddPlant)
 		plants.GET("", handler.GetPlant)
-		plants.GET("/:id", handler.GetPlantById)
-		plants.PUT("/:id", handler.Update)
-		plants.DELETE("/:id", handler.Delete)
+		plants.GET("/:plantId", handler.GetPlantById)
+		plants.PUT("/:plantId", handler.Update)
+		plants.DELETE("/:plantId", handler.Delete)
 	}
 
 	return plants

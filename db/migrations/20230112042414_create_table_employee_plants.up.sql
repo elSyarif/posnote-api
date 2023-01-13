@@ -1,7 +1,7 @@
 CREATE TABLE employee_plants(
     id varchar(36) primary key not null,
     employee_id varchar(36) not null,
-    plant_id varchar(35) not null,
+    plant_id varchar(36) not null,
     position varchar(50) not null,
     join_date datetime,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
