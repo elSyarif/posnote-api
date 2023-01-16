@@ -29,9 +29,9 @@ func (service *employeePlantService) GetByEmployeeId(ctx context.Context, employ
 func (service *employeePlantService) GetByPlantId(ctx context.Context, plantId string) (*[]domain.EmplPlantResponse, error) {
 	return service.repository.FindByPlantId(ctx, plantId)
 }
-func (service *employeePlantService) Update(ctx context.Context, id string, emplplant *domain.EmployeePlants) error {
-	return service.repository.Update(ctx, id, emplplant)
+func (service *employeePlantService) Update(ctx context.Context, plantId string, emplId string, emplplant *domain.EmployeePlants) error {
+	return service.repository.Update(ctx, plantId, emplId, emplplant)
 }
-func (service *employeePlantService) Delete(ctx context.Context, id string) error {
-	return service.repository.Delete(ctx, id)
+func (service *employeePlantService) Delete(ctx context.Context, plantId string, emplId string) error {
+	return service.repository.Delete(ctx, plantId, emplId)
 }

@@ -114,8 +114,8 @@ func (repository *employeePlantRepository) FindByPlantId(ctx context.Context, pl
 	return &emplPlantResponse, nil
 }
 
-func (repository *employeePlantRepository) Update(ctx context.Context, id string, emplplant *domain.EmployeePlants) error {
-	query := `UPDATE employee_plants SET position = ?, join_date = ?, updated_at = ? WHERE id = ?`
+func (repository *employeePlantRepository) Update(ctx context.Context, plantId string, emplId string, emplplant *domain.EmployeePlants) error {
+	query := `UPDATE employee_plants SET position = ?, join_date = ?, updated_at = ? WHERE plant_id = ? AND employee_id = ?`
 
 	emplplant.UpdatedAt = time.Now().Local()
 
@@ -124,7 +124,7 @@ func (repository *employeePlantRepository) Update(ctx context.Context, id string
 		return errors.New(err.Error())
 	}
 
-	result, err := tx.ExecContext(ctx, query, emplplant.Position, emplplant.JoinDate, emplplant.UpdatedAt, id)
+	result, err := tx.ExecContext(ctx, query, emplplant.Position, emplplant.JoinDate, emplplant.UpdatedAt, plantId, emplId)
 	if err != nil {
 		tx.Rollback()
 		return errors.New(err.Error())
@@ -138,15 +138,15 @@ func (repository *employeePlantRepository) Update(ctx context.Context, id string
 	return nil
 }
 
-func (repository *employeePlantRepository) Delete(ctx context.Context, id string) error {
-	query := `DELETE FROM employee_plants WHERE id = ?`
+func (repository *employeePlantRepository) Delete(ctx context.Context, plantId string, emplId string) error {
+	query := `DELETE FROM employee_plants WHERE plant_id = ? AND employee_id = ?`
 
 	tx, err := repository.DB.Beginx()
 	if err != nil {
 		return errors.New(err.Error())
 	}
 
-	result, err := tx.ExecContext(ctx, query, id)
+	result, err := tx.ExecContext(ctx, query, plantId, emplId)
 	if err != nil {
 		tx.Rollback()
 		return errors.New(err.Error())

@@ -113,6 +113,25 @@ func (handler *handler) GetEmployeePlantByPlantId(ctx *gin.Context) {
 * Params: [plantId, emplId]
  */
 func (handler *handler) PutEmployeePlant(ctx *gin.Context) {
+	c, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	emplPlant := domain.EmployeePlants{}
+
+	plantId := ctx.Param("plantId")
+	emplId := ctx.Param("emplId")
+
+	err := ctx.ShouldBindJSON(&emplPlant)
+	if err != nil {
+		helper.HTTPResponseError(ctx, 400, "fail", err.Error(), nil)
+		return
+	}
+
+	err = handler.service.Update(c, plantId, emplId, &emplPlant)
+	if err != nil {
+		helper.HTTPResponseError(ctx, 400, "fail", err.Error(), nil)
+	}
+
 	helper.HTTPResponseSuccess(ctx, 200, "Update Employee plant")
 }
 
@@ -121,5 +140,15 @@ func (handler *handler) PutEmployeePlant(ctx *gin.Context) {
 * Params: [plantId, emplId]
  */
 func (handler *handler) DeleteEmployeePlant(ctx *gin.Context) {
+	c, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	plantId := ctx.Param("plantId")
+	emplId := ctx.Param("emplId")
+
+	err := handler.service.Delete(c, plantId, emplId)
+	if err != nil {
+		helper.HTTPResponseError(ctx, 400, "fail", err.Error(), nil)
+	}
 	helper.HTTPResponseSuccess(ctx, 200, "Delete Employee plant")
 }

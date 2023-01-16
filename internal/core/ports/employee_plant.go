@@ -11,8 +11,8 @@ type EmployeePlantRepostory interface {
 	Find(ctx context.Context, params string) (*[]domain.EmplPlantResponse, error)
 	FindByEmployeeId(ctx context.Context, employeeId string) (*domain.EmplPlantResponse, error)
 	FindByPlantId(ctx context.Context, plantId string) (*[]domain.EmplPlantResponse, error)
-	Update(ctx context.Context, id string, emplplant *domain.EmployeePlants) error
-	Delete(ctx context.Context, id string) error
+	Update(ctx context.Context, plantId string, emplId string, emplplant *domain.EmployeePlants) error
+	Delete(ctx context.Context, plantId string, emplId string) error
 }
 
 type EmployeePlantService interface {
@@ -20,6 +20,6 @@ type EmployeePlantService interface {
 	GetEmloyeePlant(ctx context.Context, params string) (*[]domain.EmplPlantResponse, error)
 	GetByEmployeeId(ctx context.Context, employeeId string) (*domain.EmplPlantResponse, error)
 	GetByPlantId(ctx context.Context, plantId string) (*[]domain.EmplPlantResponse, error)
-	Update(ctx context.Context, id string, emplplant *domain.EmployeePlants) error
-	Delete(ctx context.Context, id string) error
+	Update(ctx context.Context, plantId string, emplId string, emplplant *domain.EmployeePlants) error
+	Delete(ctx context.Context, plantId string, emplId string) error
 }
