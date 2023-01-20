@@ -46,6 +46,24 @@ func (repsitory *employeeRepository) Save(ctx context.Context, employee *domain.
 	return employee, nil
 }
 
+func (repsitory *employeeRepository) Find(ctx context.Context, name string) (*[]domain.Employees, error) {
+	query := "SELECT id, fullname, username FROM employees WHERE fullname like ?"
+
+	var employees []domain.Employees
+
+	tx, err := repsitory.DB.Beginx()
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	err = tx.SelectContext(ctx, &employees, query, "%"+name+"%")
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	return &employees, nil
+}
+
 func (repsitory *employeeRepository) FindById(ctx context.Context, id string) (*domain.Employees, error) {
 	query := "SELECT id, fullname, username, role_id, created_at, updated_at FROM employees WHERE id = ?"
 

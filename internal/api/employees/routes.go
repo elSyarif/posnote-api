@@ -13,8 +13,9 @@ func NewEmployeeRoutes(router *gin.RouterGroup, db *sqlx.DB) *gin.RouterGroup {
 	service := services.NewEmployeeService(reposiroty)
 	handler := NewEmployeeHandler(service)
 
-	employees := router.Group("employees")
+	employees := router.Group("/employees")
 	employees.POST("", handler.AddEmployee)
+	employees.GET("", handler.Get)
 
 	employees.Use(middleware.Auth())
 	{

@@ -42,6 +42,23 @@ func (handler *handler) AddEmployee(ctx *gin.Context) {
 	})
 }
 
+func (handler *handler) Get(ctx *gin.Context) {
+	c, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	name := ctx.Query("name")
+
+	result, err := handler.service.Get(c, name)
+	if err != nil {
+		helper.HTTPResponseError(ctx, http.StatusBadRequest, "fail", err.Error(), nil)
+		return
+	}
+
+	helper.HTTPResponseSuccessWithData(ctx, 200, gin.H{
+		"employees": result,
+	})
+}
+
 func (handler *handler) GetEmployeeById(ctx *gin.Context) {
 	c, cancel := context.WithCancel(context.Background())
 	defer cancel()
