@@ -62,7 +62,7 @@ func (handler *handler) GetPlantById(ctx *gin.Context) {
 	c, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	id := ctx.Param("id")
+	id := ctx.Param("plantId")
 	plant, err := handler.service.GetById(c, id)
 	if err != nil {
 		helper.HTTPResponseError(ctx, http.StatusBadRequest, "fail", err.Error(), nil)
@@ -79,7 +79,7 @@ func (handler *handler) Update(ctx *gin.Context) {
 	defer cancel()
 
 	var plant *domain.Plants
-	id := ctx.Param("id")
+	id := ctx.Param("plantId")
 
 	err := ctx.ShouldBindJSON(&plant)
 	if err != nil {
@@ -100,7 +100,7 @@ func (handler *handler) Delete(ctx *gin.Context) {
 	c, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	id := ctx.Param("id")
+	id := ctx.Param("plantId")
 
 	err := handler.service.Delete(c, id)
 	if err != nil {
